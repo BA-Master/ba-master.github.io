@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <title>北中大师赛-提交照片</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://hcaptcha.com/1/api.js" async defer></script>
+
+
+  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+
+
+  <meta charset="UTF-8">
+  <style>
+    main {
+      padding-left: 10%;
+      padding-right: 10%;
+    }
+
+
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 40px 0;
+      bottom: 0;
+      position: relative;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .left-section, .middle-section, .right-section {
+      flex: 1;
+      padding: 0 20px;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li a.footerLinks {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      padding: 5px 0;
+    }
+
+    li a:hover {
+      text-decoration: underline;
+    }
+
+
+    a {
+      color: black;
+      cursor: pointer;
+    }
+  </style>
+
+
+
+
+</head>
+
+
+<body>
+
+<header>
+  <nav>
+    <ul>
+      <li><a href="index.html">北中大师赛</a></li>
+      <li><a href="upload.html">提交照片</a></li>
+      <li><a href="gallery.html">展览</a></li>
+      <li><a href="rules.html">赛程与赛制</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+  <h1>提交照片</h1>
+  <h2>提交方式</h2>
+  <p>参赛作品提交时间为北京时间（UTC+8）2023年5月12日-2023年5月25日24:00。提交图片文件，以“[组别]_[姓名]_[编号]_[联系方式(微信号)].JPEG”或“[组别]_[姓名]_[编号]_[联系方式(微信号)].TIFF”命名，例如：“创意_李若冲_A_abcde.JPEG”。您可根据自己的意愿报名参加多个类别，在提交参赛作品时，所报的各项类别必须包含五（5）张及以下图像，各份作品均按照该类别之下提交的图像来评审。图像无需构成一组图像或是一系列图像，只需符合该类别的性质，并且能够最好地展示您的水平和创意。</p>
+  <h2>注意事项</h2>
+  <p>所有参赛者须在参加比赛前阅读并接受以下赛程、赛制、条款与条件。您提交报名表并提交参赛图像即视为您同意北中大师赛2023的全部赛程、赛制、条款与条件。</p>
+  <p>参赛者了解并接受，仅送达证明（如上传成功的截图等）不可当作参赛作品提交成功或成功传送参赛作品的证明；无论是否因服务器故障、电脑病毒、系统漏洞或其他原因，北京中学摄影与动画社团概不会就任何操作或传送过程中的错误、遗漏、中断、删除、损毁、延误、丢失，通讯线路故障、或未经授权读取、盗窃、损毁、更改等承担责任（因北京中学摄影与动画社团故意或者存在重大过失造成的除外）。</p>
+  <br>
+
+  <form
+          name="contact"
+          method="POST"
+          data-netlify-recaptcha="true"
+          data-netlify="true"
+  >
+    <p>
+      <label>
+        Email: <input type="text" name="name" />
+      </label>
+    </p>
+    <p>
+      <label>
+        Message: <textarea name="message"></textarea>
+      </label>
+    </p>
+    <div data-netlify-recaptcha="true"></div>
+    <p>
+      <button type="submit">Send</button>
+    </p>
+  </form>
+
+
+</main>
+<footer>
+  <div class="footer-container">
+    <div class="left-section">
+      <h3>关于我们</h3>
+      <h4>北京中学摄影与动画社团</h4>
+      <p>正式建立与2022年，目前仍在前期发展期，主要介绍一些摄影知识与二维动画制作方面的讲解。我们的社团致力于纪录生活中的美好瞬间，并进行创作，引起人们的共鸣。欢迎各位前来资讯，目前社团摄影分部与动画分部仍在持续招人中！</p>
+    </div>
+    <div class="middle-section">
+      <h3>导航</h3>
+      <ul>
+        <li><a href="./index.html" class="footerLinks">主页</a></li>
+        <li><a href="./upload.html" class="footerLinks">提交照片</a></li>
+        <li><a href="./contactUs.html" class="footerLinks">联系我们</a></li>
+        <li><a href="./rules.html" class="footerLinks">赛程与赛制</a></li>
+        <li><a href="./terms.html" class="footerLinks">条款与条件</a></li>
+      </ul>
+    </div>
+    <div class="right-section">
+      <h3>联系我们</h3>
+      <p>北京中学高一4班<br>李若冲(负责人) 焦梓峻 程渡<br>Email: ba-master@outlook.com</p>
+    </div>
+
+  </div>
+  <p class="copyright">&copy; 2023 北京中学摄影与动画社团</p>
+</footer>
+
+</body>
+</html>

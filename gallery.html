@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>北中大师赛 - 展览</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 40px 0;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .left-section, .middle-section, .right-section {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li a.footerLinks {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+
+        a {
+            color: black;
+            cursor: pointer;
+        }
+
+
+        .category {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .category img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .category-name {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+
+        .category .thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .category .thumbnails .thumbnail {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .category .thumbnails .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+        }
+
+        .category .thumbnails .thumbnail:hover img {
+            transform: scale(1.1);
+        }
+
+        .category .thumbnails .thumbnail .thumbnail-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .category .thumbnails .thumbnail:hover .thumbnail-text {
+            opacity: 1;
+        }
+
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox.open {
+            opacity: 1;
+        }
+
+        #lightbox-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            max-width: 95%;
+            max-height: 95%;
+        }
+
+
+        #lightbox-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox-prev,
+        #lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: #7a7a7a;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox-prev {
+            left: 20px;
+        }
+
+        #lightbox-next {
+            right: 20px;
+        }
+
+        #lightbox-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            color: #7a7a7a;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox-preview {
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        #lightbox.open #lightbox-preview {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #lightbox-image-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #lightbox-image-list li {
+            margin: 0 5px;
+        }
+
+        #lightbox-image-list li img {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            border-radius: 5px;
+            object-fit: cover;
+            transition: opacity 0.2s ease;
+        }
+
+        #lightbox-image-list li img:hover {
+            opacity: 0.7;
+        }
+
+        #lightbox-image-list li img.active {
+            opacity: 0.7;
+        }
+
+
+    </style>
+    <script>
+        var imageUrls = [];
+        var currentImageIndex = 0;
+
+        function openLightbox(urls) {
+            imageUrls = urls;
+            currentImageIndex = 0;
+
+            var lightbox = document.getElementById('lightbox');
+            var lightboxImage = document.getElementById('lightbox-image');
+            var lightboxImageList = document.getElementById('lightbox-image-list');
+
+            lightboxImage.src = imageUrls[currentImageIndex];
+            lightbox.classList.add('open');
+            lightbox.style.display = 'block';
+
+            // Clear the image list
+            lightboxImageList.innerHTML = '';
+
+            // Populate the image list with thumbnails
+            for (var i = 0; i < imageUrls.length; i++) {
+                var li = document.createElement('li');
+                var img = document.createElement('img');
+                img.src = imageUrls[i];
+                img.onclick = function(index) {
+                    return function() {
+                        currentImageIndex = index;
+                        changeImage('current');
+                    };
+                }(i);
+                if (i === currentImageIndex) {
+                    img.classList.add('active');
+                }
+                li.appendChild(img);
+                lightboxImageList.appendChild(li);
+            }
+
+            showPreviewImages();
+        }
+
+        function closeLightbox() {
+            var lightbox = document.getElementById('lightbox');
+            var lightboxImage = document.getElementById('lightbox-image');
+
+            lightboxImage.src = '';
+            lightbox.classList.remove('open');
+            lightbox.style.display = 'none';
+
+            hidePreviewImages();
+        }
+
+        function showPreviewImages() {
+            var lightboxPreview = document.getElementById('lightbox-preview');
+            lightboxPreview.style.display = 'block';
+        }
+
+        function hidePreviewImages() {
+            var lightboxPreview = document.getElementById('lightbox-preview');
+            lightboxPreview.style.display = 'none';
+        }
+
+        function changeImage(direction) {
+            var lightboxImage = document.getElementById('lightbox-image');
+            var lightboxImageList = document.getElementById('lightbox-image-list');
+            var thumbnails = lightboxImageList.getElementsByTagName('img');
+
+            for (var i = 0; i < thumbnails.length; i++) {
+                thumbnails[i].classList.remove('active');
+            }
+
+            if (direction === 'prev') {
+                currentImageIndex = (currentImageIndex - 1 + imageUrls.length) % imageUrls.length;
+            } else if (direction === 'next') {
+                currentImageIndex = (currentImageIndex + 1) % imageUrls.length;
+            }
+
+            lightboxImage.src = imageUrls[currentImageIndex];
+            thumbnails[currentImageIndex].classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+          <ul>
+            <li><a href="index.html">北中大师赛</a></li>
+            <li><a href="upload.html">提交照片</a></li>
+            <li><a href="gallery.html">展览</a></li>
+            <li><a href="rules.html">赛程与赛制</a></li>
+            <li><a href="faq.html">Q&A</a></li>
+          </ul>
+        </nav>
+      </header>
+
+<main>
+    <h1>北中大师赛大师入围奖获得者作品</h1>
+    <p>排名不分先后</p>
+
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/f5f1ae61-1f94-4f87-a874-25553d8d56d2/__A_abcdachong.jpeg', 
+                'https://ucarecdn.com/a812810a-8554-40ca-8612-81df219beffc/__D_abcdachong.jpeg', 
+                'https://ucarecdn.com/0f04a1db-f793-432d-89c8-4f4f43e20ee2/__C_abcdachong.jpeg', 
+                './art/ARTfinalistD.jpeg'])">
+                <img src="https://ucarecdn.com/f5f1ae61-1f94-4f87-a874-25553d8d56d2/__A_abcdachong.jpeg" alt="艺术组">
+                <div class="thumbnail-text">艺术</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/8d1fbf44-b545-4981-ace8-b48b3632d0d9/__A_abcdachong.jpeg', 
+                'https://ucarecdn.com/f9325a7f-b129-44e6-aeff-6ab0e3226ea7/__A_ercizi.JPEG', 
+                'https://ucarecdn.com/9f9d3f89-a91d-40a7-8afb-87882205d218/__A_pjcp71025vxJPEG.jpg', 
+                'https://ucarecdn.com/08a80889-ddac-4357-8234-b3773ad361d6/__E_pjcp71025vxJPEG.jpg', 
+                'https://ucarecdn.com/29234c3a-b638-4399-af6e-525c46544099/__E_abcdachong.jpeg', 
+                'https://ucarecdn.com/ce5e5923-6c87-47c4-8ea5-3c3f9e657aeb/02wxid_7o9pyov278gc12.jpg', 
+                'https://ucarecdn.com/0b7d5918-e2e2-4125-aa6c-8d8fbd6a1839/__B_kan_zhi_xing.JPG', 
+                'https://ucarecdn.com/d6ab6c63-d282-4ae4-8576-4ae120326841/__D_pjcp71025vxJPEG.jpg', 
+                'https://ucarecdn.com/21476b51-e058-469e-8233-f09c551e57e1/__B_abcdachong.jpeg', 
+                'https://ucarecdn.com/c10f88c1-f45a-4534-b892-9c234c1c8fe3/__C_abcdachong.jpeg'])">
+                <img src="https://ucarecdn.com/8d1fbf44-b545-4981-ace8-b48b3632d0d9/__A_abcdachong.jpeg" alt="建筑组">
+                <div class="thumbnail-text">建筑</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/3c30b691-26ad-4331-b203-adb19ae206e7/215201190877.tiff', 
+                'https://ucarecdn.com/8fa588f9-9923-4ea1-b759-4003b0d63dc7/115201190877.tiff', 
+                'https://ucarecdn.com/e9c00a64-5e5d-4570-81ee-fa87c239d1df/__B_abcdachong.jpeg', 
+                'https://ucarecdn.com/2fa133aa-50f8-46fd-bbe3-8f01bd2dc584/__A_pjcp71025vxJPEG.jpg', 
+                'https://ucarecdn.com/863f56ec-38b7-4cf5-bdfd-5a0b623f9579/515201190877.jpg', 
+                'https://ucarecdn.com/618639d8-6ac9-4a27-8f5d-a9ea7a54e7e0/315201190877.tiff', 
+                'https://ucarecdn.com/a61fe151-6942-4fd7-972a-f4db033bd5bf/__D_abcdachong.jpeg', 
+                'https://ucarecdn.com/fd830830-830f-40c7-a31a-08b386ba77f5/__B_ercizi.JPEG', 
+                'https://ucarecdn.com/80ed05be-fc84-43a2-b80d-563d059c2242/__A_kan_zhi_xing.JPG', 
+                'https://ucarecdn.com/37ad2162-6f83-46a0-9dd9-c147af64a195/__C_ercizi.jpeg', 
+                'https://ucarecdn.com/e9c39863-0698-4f72-a673-1755c32d3b9b/LJN_3832.jpg'])">
+                <img src="https://ucarecdn.com/3c30b691-26ad-4331-b203-adb19ae206e7/215201190877.tiff" alt="风光/自然组">
+                <div class="thumbnail-text">风光/自然</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/b2027bd7-e425-4e8b-833c-d9744086116f/__D_abcdachong.jpeg', 
+                'https://ucarecdn.com/8aaf5fda-0f45-46a0-a956-92e31912ef7c/__A_ercizi.JPEG', 
+                'https://ucarecdn.com/41dd3863-efb7-4eeb-b428-e11c77caa871/__C_ercizi.JPEG', 
+                'https://ucarecdn.com/b438c449-9e1b-419b-80a7-d5f9cfd787a1/__E_abcdachong.jpeg', 
+                'https://ucarecdn.com/f91e0acf-0adf-46f1-8ab5-7c8c590622b6/__B_abcdachong.jpeg'])">
+                <img src="https://ucarecdn.com/b2027bd7-e425-4e8b-833c-d9744086116f/__D_abcdachong.jpeg" alt="人像组">
+                <div class="thumbnail-text">人像</div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/49bfdcbc-1926-49d1-9c24-8206870ebfe2/__C_pjcp71025vxJPEG.jpg', 
+                'https://ucarecdn.com/ca41dd32-cbf7-46eb-bfa5-bb1e8f4487ca/215201190877.tiff', 
+                'https://ucarecdn.com/8b6bb0ce-9369-4d56-bfe2-663e8d683bff/115201190877.tiff', 
+                'https://ucarecdn.com/8682c2ee-41d5-49bf-9250-f939b6859f15/__A_pjcp71025vxJPEG.jpg', 
+                'https://ucarecdn.com/b902d9e8-88bf-4841-a14f-b8c37a17cd0c/418310613168.JPG', 
+                'https://ucarecdn.com/8cde0e49-c86b-412f-88b5-46694327c3bb/315201190877.jpg', 
+                'https://ucarecdn.com/485aabc6-a9c1-4025-ac21-758ea48e74da/__E_abcdachong.jpeg', 
+                'https://ucarecdn.com/a237e79f-ef48-475d-aeaa-0aefaffff41b/__A_abcdachong.jpeg', 
+                'https://ucarecdn.com/309da930-0709-4551-b611-399a1259a051/__E_ercizi.jpeg', 
+                'https://ucarecdn.com/81e5af5f-1fa8-4a7b-a713-39e9c5dca603/__A_ercizi.JPEG'])">                
+            <img src="./cit/CITfinalistA.jpg" alt="街道/城市组">
+                <div class="thumbnail-text">街道/城市</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/e5bb20ef-a3a1-4a9c-bac1-90b877b7fed0/415201190877.jpg', 
+                'https://ucarecdn.com/0800f7f9-0821-4377-af2f-4b19c1a3c3e7/__B_kan_zhi_xing.JPG', 
+                'https://ucarecdn.com/4bb534d4-7598-4f92-8ea7-de8ce4b0c284/__D_kan_zhi_xing.JPG', 
+                'https://ucarecdn.com/8f87db67-4071-48b7-bf45-bbbd73c9f1b8/__A_18210720360.jpg', 
+                'https://ucarecdn.com/a46814f4-48a0-4a1e-8097-5b822b1fd0a6/__E_abcdachong.jpeg', 
+                'https://ucarecdn.com/2d0fc6ca-dc97-4087-ba68-4e64d7f04822/__A_abcdachong.jpeg', 
+                'https://ucarecdn.com/d603857f-1a7e-4e92-b0ca-d35a7f27d4f4/__B_abcdachong.jpeg',  
+                'https://ucarecdn.com/8788bdda-a19a-4d8c-958c-417f68439ce1/__A_ercizi.jpeg'])">
+                <img src="https://ucarecdn.com/e5bb20ef-a3a1-4a9c-bac1-90b877b7fed0/415201190877.jpg" alt="生物组">
+                <div class="thumbnail-text">生物</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Repeat the above structure for the remaining categories -->
+    
+    <div id="lightbox">
+        <div id="lightbox-content">
+            <button id="lightbox-prev" onclick="changeImage('prev')">&lt;</button>
+            <img id="lightbox-image" src="" alt="Lightbox Image">
+            <button id="lightbox-next" onclick="changeImage('next')">&gt;</button>
+            <span id="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <div id="lightbox-preview">
+                <ul id="lightbox-image-list"></ul>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <div class="footer-container">
+      <div class="left-section">
+        <h3>关于我们</h3>
+        <h4>北京中学摄影与动画社团</h4>
+        <p>正式建立与2022年，目前仍在前期发展期，主要介绍一些摄影知识与二维动画制作方面的讲解。我们的社团致力于纪录生活中的美好瞬间，并进行创作，引起人们的共鸣。欢迎各位前来资讯，目前社团摄影分部与动画分部仍在持续招人中！</p>
+      </div>
+      <div class="middle-section">
+        <h3>导航</h3>
+        <ul>
+          <li><a href="./index.html" class="footerLinks">主页</a></li>
+          <li><a href="./upload.html" class="footerLinks">提交照片</a></li>
+          <li><a href="./contactUs.html" class="footerLinks">联系我们</a></li>
+          <li><a href="./rules.html" class="footerLinks">赛程与赛制</a></li>
+          <li><a href="./terms.html" class="footerLinks">条款与条件</a></li>
+          <li><a href="./faq.html" class="footerLinks">Q&A</a></li>
+        </ul>
+      </div>
+      <div class="right-section">
+        <h3>联系我们</h3>
+        <p>北京中学高一4班<br>李若冲(负责人) 焦梓峻 程渡<br>Email: ba-master@outlook.com</p>
+      </div>
+    </div>
+    <p class="copyright">&copy; 2023 北京中学摄影与动画社团</p>
+  </footer>
+
+
+</body>
+</html>
