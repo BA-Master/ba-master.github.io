@@ -312,6 +312,43 @@
             thumbnails[currentImageIndex].classList.add('active');
         }
     </script>
+
+<script>
+	function throttle(fn, delay, atleast) {
+	    var timeout = null,
+		startTime = new Date();
+	    return function() {
+		var curTime = new Date();
+		clearTimeout(timeout);
+		if(curTime - startTime >= atleast) {
+		    fn();
+		    startTime = curTime;
+		}else {
+		    timeout = setTimeout(fn, delay);
+		}
+	    }
+	}
+	function lazyload() {
+	    var images = document.getElementsByTagName('img');
+	    var len    = images.length;
+	    var n      = 0;      //存储图片加载到的位置，避免每次都从第一张图片开始遍历		
+	    return function() {
+		var seeHeight = document.documentElement.clientHeight;
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		for(var i = n; i < len; i++) {
+		    if(images[i].offsetTop < seeHeight + scrollTop) {
+		        if(images[i].getAttribute('src') === 'images/loading.gif') {
+			     images[i].src = images[i].getAttribute('data-src');
+		        }
+			n = n + 1;
+		     }
+		}
+	    }
+	}
+	var loadImages = lazyload();
+	loadImages();          //初始化首页的页面图片
+	window.addEventListener('scroll', throttle(loadImages, 500, 1000), false);
+    </script>
 </head>
 <body>
     <header>
@@ -327,6 +364,70 @@
       </header>
 
 <main>
+    <h1>北中大师赛大师奖获得者作品</h1>
+    <p>可点击进入相应组别进行查看（加载速度可能较慢，需耐心等待或多次刷新）</p>
+
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/f5f1ae61-1f94-4f87-a874-25553d8d56d2/__A_abcdachong.jpeg'])">
+                <img src="https://ucarecdn.com/f5f1ae61-1f94-4f87-a874-25553d8d56d2/__A_abcdachong.jpeg" alt="艺术组">
+                <div class="thumbnail-text">艺术</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/f9325a7f-b129-44e6-aeff-6ab0e3226ea7/__A_ercizi.JPEG'])">
+                <img src="https://ucarecdn.com/f9325a7f-b129-44e6-aeff-6ab0e3226ea7/__A_ercizi.JPEG" alt="建筑组">
+                <div class="thumbnail-text">建筑</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/8fa588f9-9923-4ea1-b759-4003b0d63dc7/115201190877.tiff'])">
+                <img src="https://ucarecdn.com/8fa588f9-9923-4ea1-b759-4003b0d63dc7/115201190877.tiff" alt="风光/自然组">
+                <div class="thumbnail-text">风光/自然</div>
+            </div>
+        </div>
+    </div>
+
+        
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/8aaf5fda-0f45-46a0-a956-92e31912ef7c/__A_ercizi.JPEG'])">
+                <img src="https://ucarecdn.com/8aaf5fda-0f45-46a0-a956-92e31912ef7c/__A_ercizi.JPEG" alt="人像组">
+                <div class="thumbnail-text">人像</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/8b6bb0ce-9369-4d56-bfe2-663e8d683bff/115201190877.tiff'])">                
+            <img src="https://ucarecdn.com/8b6bb0ce-9369-4d56-bfe2-663e8d683bff/115201190877.tiff" alt="街道/城市组">
+                <div class="thumbnail-text">街道/城市</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <div class="thumbnails">
+            <div class="thumbnail" onclick="openLightbox([
+                'https://ucarecdn.com/d603857f-1a7e-4e92-b0ca-d35a7f27d4f4/__B_abcdachong.jpeg'])">
+                <img src="https://ucarecdn.com/d603857f-1a7e-4e92-b0ca-d35a7f27d4f4/__B_abcdachong.jpeg" alt="生物组">
+                <div class="thumbnail-text">生物</div>
+            </div>
+        </div>
+    </div>
+
     <h1>北中大师赛大师入围奖获得者作品</h1>
     <p>可点击进入相应组别进行查看（加载速度可能较慢，需耐心等待或多次刷新；排名不分先后）</p>
 
@@ -355,7 +456,8 @@
                 'https://ucarecdn.com/0b7d5918-e2e2-4125-aa6c-8d8fbd6a1839/__B_kan_zhi_xing.JPG', 
                 'https://ucarecdn.com/d6ab6c63-d282-4ae4-8576-4ae120326841/__D_pjcp71025vxJPEG.jpg', 
                 'https://ucarecdn.com/21476b51-e058-469e-8233-f09c551e57e1/__B_abcdachong.jpeg', 
-                'https://ucarecdn.com/c10f88c1-f45a-4534-b892-9c234c1c8fe3/__C_abcdachong.jpeg'])">
+                'https://ucarecdn.com/c10f88c1-f45a-4534-b892-9c234c1c8fe3/__C_abcdachong.jpeg', 
+                'https://ucarecdn.com/77727e42-b105-4f6d-ab23-a5faa7ee2489/__3_yejingyu20050916.JPG'])">
                 <img src="https://ucarecdn.com/8d1fbf44-b545-4981-ace8-b48b3632d0d9/__A_abcdachong.jpeg" alt="建筑组">
                 <div class="thumbnail-text">建筑</div>
             </div>
