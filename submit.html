@@ -38,8 +38,12 @@
                 JSON.stringify(Object.fromEntries(formData.entries())),
                 adress + "info.json",
                 "application/json"
-            );
-            alert('提交成功！', 'success');
+            ).then(() => {
+                alert('提交成功！', 'success');
+            }).catch((error) => {
+                console.error('提交失败:', error);
+                alert('提交失败，请检查链接并重试');
+            });
         });
     </script>
     <footer><div class="container py-4 py-lg-5" style="background:#000000;"><div class="row justify-content-center"><div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column item"><h3 class="fs-6 text-white">指南</h3><ul class="list-unstyled"><li><a class="link-light" href="guide.html">提交指南</a></li><li><a class="link-light" href="rules.html">参赛指南</a></li></ul></div><div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column item"><h3 class="fs-6 text-white">关于</h3><a class="link-light" href="index.html#about">北中大师赛</a><ul class="list-unstyled"><li><a class="link-light" href="index.html#contact">评委团队</a></li></ul></div><div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last item social"><div class="fw-bold d-flex align-items-center mb-2"><span class="d-flex justify-content-center align-items-center bs-icon-sm bs-icon-rounded bs-icon-primary bs-icon me-2" style="background:url(&quot;assets/img/bamwhite.png&quot;) center / contain no-repeat, var(--bs-emphasis-color);"></span><i class="far fa-star" style="color:#ffffff00;background:url(&quot;assets/img/bamwhite.png&quot;) center / contain no-repeat;font-size:30px;"></i><span>北中大师赛</span></div><p class="text-muted copyright"><span style="color:rgb(255, 255, 255);background-color:rgba(0, 0, 0, 0.18);">由北京中学学生举办的校级摄影比赛，欢迎同学及教师参加。</span></p><p style="font-family:helvetica;margin-bottom:5px;"><i class="icon ion-email" style="margin:0 5px;text-align:center;font-size:14px;"></i>社团 ba-master@outlook.com</p><p style="font-family:helvetica;margin-bottom:20px;"><i class="icon ion-email" style="margin:0 5px;text-align:center;font-size:14px;"></i>个人 rc-murphy@outlook.com</p></div></div><hr><div class="d-flex justify-content-between align-items-center pt-3"><p class="mb-0">Copyright © 2024&nbsp;Ruochong Li &amp; Ruisi Lin</p><ul class="list-inline mb-0"><li class="list-inline-item list-inline-item list-inline-item list-inline-item"></li><li class="list-inline-item list-inline-item list-inline-item list-inline-item"></li></ul></div></div></footer><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script><script src="assets/js/script.min.js"></script></body></html>
