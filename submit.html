@@ -84,6 +84,14 @@
                 value="提交"></form>
     </section>
     <script src="./dist/main.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <div class="alert alert-success" id="alertDiv" role="alert" style={{ fontSize: 20 }}>
+        <button onclick="document.getElementById('alertDiv').style.opacity = '0'" type="button" class="close"
+            data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> You have been signed in successfully!
+    </div>
     <script>
         var files = document.getElementsByClassName('form-control');
 
@@ -111,7 +119,7 @@
 
             var formData = new FormData(this); // this 指向当前的 form 元素
             const adress = formData.get('Category') + "/" + formData.get('Name') + "/";
-
+            //window.open('./404.html');
             for (let i = 1; i <= 3; i++) {
                 const Name = "Image " + String(i);
                 uploadImages(adress, formData.get(Name), Name);
@@ -123,7 +131,8 @@
                 adress + "info.json",
                 "application/json"
             ).then(() => {
-                alert('提交成功！', 'success');
+                //alert('提交成功！', 'success');
+                window.location.replace("./success.html");
             }).catch((error) => {
                 console.error('提交失败:', error);
                 alert('提交失败，请检查链接并重试');
