@@ -141,9 +141,7 @@
                     "application/json"
                 ).then(() => {
                     //alert('提交成功！', 'success');
-                    setTimeout(function() {
-                        window.location.replace("./success.html");
-                    }, 1000);
+                    window.location.replace("./success.html");
                 }).catch((error) => {
                     console.error('提交失败:', error);
                     alert('提交失败，请检查链接并重试');
