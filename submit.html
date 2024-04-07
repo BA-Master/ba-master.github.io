@@ -125,7 +125,7 @@
             for (let i = 1; i <= 3; i++) {
                 const Name = "Image " + String(i);
                 try {
-                    await uploadImages(adress, formData.get(Name), Name);
+                    uploadImages(adress, formData.get(Name), Name);
                 } catch (error) {
                     alert(error);
                 }
